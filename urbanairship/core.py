@@ -114,8 +114,7 @@ class Airship(object):
             body = ''
             content_type = None
 
-        response = self._request('PUT', body, url, content_type,
-            version=1)
+        response = self._request('PUT', body, url, content_type)
         return response.status_code == 201
 
     def deregister(self, device_token):
