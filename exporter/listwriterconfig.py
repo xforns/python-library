@@ -10,7 +10,7 @@ class ListWriterConfig():
     secret = ''
 
     # Output dir for CSV files
-    base_output_dir = 'import_files/'
+    base_output_dir = 'export_files/'
 
     # File names
     file_channel = 'devices_channel.csv'
