@@ -16,6 +16,13 @@ class DeviceInfo(object):
     active = None
     tags = None
     alias = None
+    push_address = None
+    opt_in = None
+    installed = None
+    created = None
+    last_registration = None
+    installed = None
+    ios = { 'badge': None, 'quiettime': { 'start': None, 'end': None }, 'tz': None  }
 
     @classmethod
     def from_payload(cls, payload, device_key):
@@ -23,8 +30,13 @@ class DeviceInfo(object):
         obj = cls()
         obj.id = payload[device_key]
         obj.device_type = device_key
+
         for key in payload:
             setattr(obj, key, payload[key])
+
+        if obj.device_type == 'ios':
+            ios = payload['ios']
+        
         return obj
 
 
@@ -63,6 +75,18 @@ class DeviceList(object):
         response = self._airship._request('GET', None, url, version=3, params=params)
         self._page = page = response.json()
         self._token_iter = iter(page[self.data_attribute])
+
+
+class ChannelList(DeviceList):
+    """Iterator for listing all channels for this application.
+
+    :ivar limit: Number of entries to fetch in each page request.
+    :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
+
+    """
+    start_url = common.CHANNEL_URL
+    data_attribute = 'channels'
+    id_key = 'channel_id'
 
 
 class DeviceTokenList(DeviceList):
