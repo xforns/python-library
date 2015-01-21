@@ -30,6 +30,7 @@ from .push import (
     scheduled_time,
 )
 from .devices import (
+    ChannelList,
     DeviceTokenList,
     DevicePINList,
     APIDList,
@@ -66,6 +67,7 @@ __all__ = [
     message,
     device_types,
     scheduled_time,
+    ChannelList,
     DeviceTokenList,
     DevicePINList,
     APIDList,

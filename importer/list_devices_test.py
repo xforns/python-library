@@ -7,16 +7,21 @@ import csv as csv
 """
 
 
+# UA credentials
+use_stl_credentials = 1
 key = ""
 secret = ""
 
+channel = 'channel'
 ios = 'ios'
 android = 'android'
 
-devices = { ios: [], 
+devices = { channel: [], 
+            ios: [], 
             android: [] }
 base_output_dir = 'import_files/'
-files = {   ios: base_output_dir+'devices_ios.csv', 
+files = {   channel: base_output_dir+'devices_channel.csv', 
+            ios: base_output_dir+'devices_ios.csv', 
             android: base_output_dir+'devices_android.csv' }
 
 
@@ -35,6 +40,9 @@ def retrieveDevices():
 	"""
 	global devices
     
+	print 'Retrieving channels..'
+	devices[channel] = ua.ChannelList(airship)
+    
 	print 'Retrieving iOS devices..'
 	devices[ios] = ua.DeviceTokenList(airship)
 	
@@ -46,6 +54,9 @@ def writeListsToCSV():
 	""" Writes the devices to CSV files
 	
 	"""
+    
+	print 'Writing CSV channel file..'
+	writeList(channel)
     
 	print 'Writing CSV iOS file..'
 	writeList(ios)
@@ -74,7 +85,9 @@ def buildHeaders(typeList):
 	""" Retrieves the header colums for this type list
 	
 	"""
-	if typeList == ios:
+	if typeList == channel:
+		return [['channel','type','push address','opt in','installed','created','last registration','tags','alias','badge (ios)','quiettime start (ios)','quiettime end (ios)','tz (ios)']]
+	elif typeList == ios:
 		return [['deviceID','platform','tags','alias']]
 	elif typeList == android:
 		return [['deviceID','platform','tags','alias']]
@@ -83,7 +96,11 @@ def buildRow(typeList,device):
 	""" Retrieves the data values for this type list
 	
 	"""
-	if typeList == ios:
+	if typeList == channel:
+		return [device.channel_id,device.push_address,device.opt_in,device.installed,
+                device.created,device.last_registration,device.tags,device.alias,
+                device.ios['badge'],device.ios['quiettime']['start'],device.ios['quiettime']['end'],device.ios['tz']]
+	elif typeList == ios:
 		return [device.device_token,'iOS',device.tags,device.alias]
 	elif typeList == android:
 		return [device.apid,'Android',device.tags,device.alias]
