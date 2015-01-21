@@ -5,3 +5,5 @@
 .idea/
 *.iml
 urbanairship.egg-info/
+build
+import_files
