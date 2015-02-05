@@ -92,9 +92,14 @@ class ListWriter():
 	
     	"""
     	if typeList == 'channel':
-    		return [device.channel_id,device.push_address,device.opt_in,device.installed,
-                    device.created,device.last_registration,device.tags,device.alias,
-                    device.ios['badge'],device.ios['quiettime']['start'],device.ios['quiettime']['end'],device.ios['tz']]
+            if hasattr(device,'ios'):
+                return [device.channel_id,device.push_address,device.opt_in,device.installed,
+                        device.created,device.last_registration,device.tags,device.alias,
+                        device.ios['badge'],device.ios['quiettime']['start'],device.ios['quiettime']['end'],device.ios['tz']]
+            else:
+                return [device.channel_id,device.push_address,device.opt_in,device.installed,
+                        device.created,device.last_registration,device.tags,device.alias,
+                        '','','','']
     	elif typeList == 'ios':
     		return [device.device_token,'iOS',device.tags,device.alias]
     	elif typeList == 'android':
